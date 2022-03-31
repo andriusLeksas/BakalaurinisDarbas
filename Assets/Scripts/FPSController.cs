@@ -2,11 +2,13 @@
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
+using UnityEngine.EventSystems;
 
 public class FPSController : MonoBehaviour
 {
     public GameObject bloodPrefab;
     public GameObject uiBloodSplatter;
+    public GameObject gameOverPrefab;
     public Transform shotDirection;
     public GameObject stevePrefab;
     public Slider healthbar;
@@ -65,6 +67,9 @@ public class FPSController : MonoBehaviour
             steve.GetComponent<Animator>().SetTrigger("Dance");
             GameStats.gameOver = true;
             Destroy(this.gameObject);
+            GameObject gameOverText = Instantiate(gameOverPrefab);
+            gameOverText.transform.SetParent(canvas.transform);
+            gameOverText.transform.localPosition = Vector3.zero;
         }
     }
 
@@ -335,7 +340,7 @@ public class FPSController : MonoBehaviour
         {
             cursorIsLocked = false;
         }
-        else if (Input.GetMouseButtonUp(0))
+        else if (Input.GetMouseButtonUp(0) && !EventSystem.current.IsPointerOverGameObject())
         {
             cursorIsLocked = true;
         }
