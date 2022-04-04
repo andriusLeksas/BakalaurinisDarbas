@@ -42,7 +42,7 @@ public class SpawnController : MonoBehaviour
 
     private void OnTriggerEnter(Collider other)
     {
-        if (!spawnOnStart && other.gameObject.tag == "Player");
+        if (!spawnOnStart && other.gameObject.tag == "Player")
         {
             spawnAll();
         }
