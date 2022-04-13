@@ -106,8 +106,8 @@ public class FPSController : MonoBehaviour
 
         health = maxHealth;
         ammoClip = ammoClipMax;
-        healthbar.value = health;
-        ammoReserves.text = ammoClip+ "/" + ammo + "";
+        //healthbar.value = health;
+        //ammoReserves.text = ammoClip+ "/" + ammo + "";
 
         cWidth = canvas.GetComponent<RectTransform>().rect.width;
         cHeight = canvas.GetComponent<RectTransform>().rect.height;
@@ -237,7 +237,7 @@ public class FPSController : MonoBehaviour
         cameraRotation *= Quaternion.Euler(-xRotation, 0, 0);
         characterRotation *= Quaternion.Euler(0, yRotation, 0);
 
-        cameraRotation = ClampRotationAroundXAxis(cameraRotation);
+        //cameraRotation = ClampRotationAroundXAxis(cameraRotation);
 
         this.transform.localRotation = characterRotation;
         camera.transform.localRotation = cameraRotation; 
@@ -248,7 +248,7 @@ public class FPSController : MonoBehaviour
         //new Vector3(x * speed, 0 , z * speed);
         transform.position += camera.transform.forward * z + camera.transform.right * x;
 
-        UpdateCursorLock();
+        //UpdateCursorLock();
     }
 
     Quaternion ClampRotationAroundXAxis(Quaternion q)
