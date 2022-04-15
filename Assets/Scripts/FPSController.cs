@@ -4,8 +4,14 @@ using UnityEngine;
 using UnityEngine.UI;
 using UnityEngine.EventSystems;
 
+
 public class FPSController : MonoBehaviour
 {
+    //Player class
+    public InventoryObject inventory;
+    public InventoryObject equipement;
+    public Attribute[] attributes;
+
     public GameObject bloodPrefab;
     public GameObject uiBloodSplatter;
     public GameObject gameOverPrefab;
@@ -55,6 +61,16 @@ public class FPSController : MonoBehaviour
     bool playingWalking = false;
     bool previouslyGrounded = true;
 
+    public void AttributeModified(Attribute attribute)
+    {
+        Debug.Log(string.Concat(attribute.type, "was updated! Value is now", attribute.value.ModifiedValue));
+    }
+    private void OnApplicationQuit()
+    {
+        inventory.Clear();
+        equipement.Clear();
+    }
+
     void OnTriggerEnter(Collider col)
     {
         if (col.gameObject.tag == "Home")
@@ -70,6 +86,17 @@ public class FPSController : MonoBehaviour
             GameObject gameOverText = Instantiate(gameOverPrefab);
             gameOverText.transform.SetParent(canvas.transform);
             gameOverText.transform.localPosition = Vector3.zero;
+        }
+
+        var item = col.GetComponent<GroundItem>();
+        if (item)
+        {
+            Item _item = new Item(item.item);
+            if (inventory.AddItem(_item, 1))
+            {
+                Destroy(col.gameObject);
+            }
+
         }
     }
 
@@ -98,6 +125,18 @@ public class FPSController : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
+
+        for(int i = 0; i< attributes.Length; i++)
+        {
+            attributes[i].SetParent(this);
+        }
+
+        for (int i = 0; i < equipement.GetSlots.Length; i++)
+        {
+            equipement.GetSlots[i].OnBeforeUpdate += OnBeforeSlotUpdate;
+            equipement.GetSlots[i].OnAfterUpdate += OnAfterSlotUpdate;
+        }
+
         rb = this.GetComponent<Rigidbody>();
         cap = this.GetComponent<CapsuleCollider>();
 
@@ -112,6 +151,76 @@ public class FPSController : MonoBehaviour
         cWidth = canvas.GetComponent<RectTransform>().rect.width;
         cHeight = canvas.GetComponent<RectTransform>().rect.height;
 
+    }
+
+    public void OnBeforeSlotUpdate(InventorySlot _slot)
+    {
+        if(_slot.ItemObject != null)
+        {
+            return;
+        }
+        switch (_slot.parent.inventory.type)
+        {
+            case InterfaceType.Inventory:
+
+                break;
+            case InterfaceType.Equipement:
+                print(string.Concat("Removed", _slot.ItemObject, "on", _slot.parent.inventory.type,
+                        ", Allowed items:", string.Join(", ", _slot.AllowedItems)));
+
+                for (int i = 0; i < _slot.item.buffs.Length; i++)
+                {
+                    for (int j = 0; j < attributes.Length; j++)
+                    {
+                        if (attributes[j].type == _slot.item.buffs[i].attribute)
+                        {
+                            attributes[j].value.RemoveModifiers(_slot.item.buffs[i]);
+                        }
+                    }
+                }
+
+                break;
+            case InterfaceType.Chest:
+
+                break;
+            default:
+                break;
+        }
+
+    }
+    public void OnAfterSlotUpdate(InventorySlot _slot)
+    {
+        if(_slot.ItemObject == null)
+        {
+            return;
+        }
+
+        switch (_slot.parent.inventory.type)
+        {
+            case InterfaceType.Inventory:
+                break;
+            case InterfaceType.Equipement:
+                print(string.Concat("Placed", _slot.ItemObject, "on", _slot.parent.inventory.type,
+                        ", Allowed items:", string.Join(", ", _slot.AllowedItems)));
+
+                for (int i = 0; i < _slot.item.buffs.Length; i++)
+                {
+                    for (int j = 0; j < attributes.Length; j++)
+                    {
+                        if(attributes[j].type == _slot.item.buffs[i].attribute)
+                        {
+                            attributes[j].value.AddModifiers(_slot.item.buffs[i]);
+                        }
+                    }
+                }
+
+                break;
+            case InterfaceType.Chest:
+
+                break;
+            default:
+                break;
+        }
     }
 
     // Update is called once per frame
@@ -356,4 +465,26 @@ public class FPSController : MonoBehaviour
             Cursor.visible = true;
         }
     }
+
+    [System.Serializable]
+    public class Attribute
+    {
+        [System.NonSerialized]
+        public FPSController parent;
+        public Attributes type;
+        public ModifiableInt value;
+
+        public void SetParent(FPSController _parent)
+        {
+            parent = _parent;
+            value = new ModifiableInt(AttributeModified);
+        }
+
+        public void AttributeModified()
+        {
+            parent.AttributeModified(this);
+        }
+    }
 }
+
+

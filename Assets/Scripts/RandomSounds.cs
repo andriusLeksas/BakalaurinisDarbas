@@ -20,6 +20,7 @@ public class RandomSounds : MonoBehaviour
         GameObject newSound = new GameObject();
         AudioSource newAs = newSound.AddComponent<AudioSource>();
         newAs.clip = sound.clip;
+        
         if (sound3D)
         {
             newAs.spatialBlend = 1;

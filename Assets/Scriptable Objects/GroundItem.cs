@@ -14,7 +14,9 @@ public class GroundItem : MonoBehaviour, ISerializationCallbackReceiver
 
     public void OnBeforeSerialize()
     {
+#if UNITY_EDITOR
         GetComponentInChildren<SpriteRenderer>().sprite = item.uiDisplay;
         EditorUtility.SetDirty(GetComponentInChildren<SpriteRenderer>());
+#endif
     }
 }

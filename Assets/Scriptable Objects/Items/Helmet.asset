@@ -12,12 +12,15 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 5fd7a3c6b0e44964cb596c9da9fdc538, type: 3}
   m_Name: Helmet
   m_EditorClassIdentifier: 
-  Id: 2
   uiDisplay: {fileID: 21300000, guid: 9917575eb3c558a409e3838009157430, type: 3}
+  stacable: 0
   type: 1
   description: Protective helmet
-  buffs:
-  - attribute: 2
-    value: 0
-    min: 5
-    max: 10
+  data:
+    Name: 
+    Id: 1
+    buffs:
+    - attribute: 2
+      value: 1
+      min: 5
+      max: 10
