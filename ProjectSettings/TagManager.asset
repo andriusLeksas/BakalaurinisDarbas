@@ -10,6 +10,7 @@ TagManager:
   - Zombie
   - Ragdoll
   - Home
+  - Inventory
   layers:
   - Default
   - TransparentFX

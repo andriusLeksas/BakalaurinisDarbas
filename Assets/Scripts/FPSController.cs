@@ -7,6 +7,12 @@ using UnityEngine.EventSystems;
 
 public class FPSController : MonoBehaviour
 {
+    //Testing
+    public float Hp_Min;
+    public float Hp_Max;
+    public Image barra;
+
+
     //Player class
     public InventoryObject inventory;
     public InventoryObject equipement;
@@ -37,6 +43,8 @@ public class FPSController : MonoBehaviour
     float maxX = 90;
     Rigidbody rb;
     CapsuleCollider cap;
+    bool InventoryActive = false;
+    GameObject[] inventories;
 
     public GameObject canvas;
     float cWidth;
@@ -55,7 +63,7 @@ public class FPSController : MonoBehaviour
     int maxAmmo = 80;
     int ammoClip = 0;
     int ammoClipMax = 12;
-    int health = 0;
+    public int health = 0;
     int maxHealth = 100;
 
     bool playingWalking = false;
@@ -150,7 +158,13 @@ public class FPSController : MonoBehaviour
 
         cWidth = canvas.GetComponent<RectTransform>().rect.width;
         cHeight = canvas.GetComponent<RectTransform>().rect.height;
-
+        
+        inventories = GameObject.FindGameObjectsWithTag("Inventory");
+        for (int i = 0; i < inventories.Length; i++)
+        {
+            inventories[i].transform.position = new Vector3(inventories[i].transform.position.x, inventories[i].transform.position.y - 1000
+                , inventories[i].transform.position.z);
+        }
     }
 
     public void OnBeforeSlotUpdate(InventorySlot _slot)
@@ -200,8 +214,8 @@ public class FPSController : MonoBehaviour
             case InterfaceType.Inventory:
                 break;
             case InterfaceType.Equipement:
-                print(string.Concat("Placed", _slot.ItemObject, "on", _slot.parent.inventory.type,
-                        ", Allowed items:", string.Join(", ", _slot.AllowedItems)));
+                //print(string.Concat("Placed", _slot.ItemObject, "on", _slot.parent.inventory.type,
+                        //", Allowed items:", string.Join(", ", _slot.AllowedItems)));
 
                 for (int i = 0; i < _slot.item.buffs.Length; i++)
                 {
@@ -226,29 +240,61 @@ public class FPSController : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
+
+
         if (Input.GetKeyDown(KeyCode.F))
         {
             anim.SetBool("arm", !anim.GetBool("arm"));
         }
 
-        if (Input.GetMouseButtonDown(0) && !anim.GetBool("fire") && anim.GetBool("arm") && GameStats.canShoot && !anim.GetBool("reload"))
+        if (Input.GetKeyDown(KeyCode.I) && !InventoryActive)
         {
-            if(ammoClip > 0)
+            //Debug.Log("I pressed set active");
+            for (int i = 0; i < inventories.Length; i++)
             {
-                anim.SetTrigger("fire");
-                ProcessZombieHit();
-                ammoClip--;
-                ammoReserves.text = ammoClip + "/" + ammo + "";
-                GameStats.canShoot = false;
+                
+                inventories[i].transform.position = new Vector3(inventories[i].transform.position.x, inventories[i].transform.position.y 
+                    + 1000, inventories[i].transform.position.z);
+
             }
-            else
+            cursorIsLocked = false;
+            anim.SetBool("arm", !anim.GetBool("arm"));
+            InventoryActive = true;
+
+        }else if (Input.GetKeyDown(KeyCode.I) && InventoryActive)
+        {
+            
+            for (int i = 0; i < inventories.Length; i++)
             {
-                noAmmoSound.Play();
+
+                inventories[i].transform.position = new Vector3(inventories[i].transform.position.x, inventories[i].transform.position.y 
+                    - 1000, inventories[i].transform.position.z);
+                
             }
+            cursorIsLocked = true;
+            anim.SetBool("arm", !anim.GetBool("arm"));
+            InventoryActive = false;
+
+        }
+
+        //if (Input.GetMouseButtonDown(0) && !anim.GetBool("fire") && anim.GetBool("arm") && GameStats.canShoot && !anim.GetBool("reload"))
+        //{
+        //    if(ammoClip > 0)
+        //    {
+        //        anim.SetTrigger("fire");
+        //        ProcessZombieHit();
+        //        ammoClip--;
+        //        ammoReserves.text = ammoClip + "/" + ammo + "";
+        //        GameStats.canShoot = false;
+        //    }
+        //    else
+        //    {
+        //        noAmmoSound.Play();
+        //    }
 
             
-            Debug.Log("Ammo Left in clip:" + ammoClip);
-        }
+        //    Debug.Log("Ammo Left in clip:" + ammoClip);
+        //}
 
         if (Input.GetKeyDown(KeyCode.R) && anim.GetBool("arm"))
         {           
@@ -279,7 +325,9 @@ public class FPSController : MonoBehaviour
             CancelInvoke("PlaySteps");
             playingWalking = false;
         }
+
         bool grounded = IsGrounded();
+
         if (Input.GetKeyDown(KeyCode.Space) && grounded)
         {
             rb.AddForce(0, 300, 0);
@@ -343,21 +391,27 @@ public class FPSController : MonoBehaviour
         float yRotation = Input.GetAxis("Mouse X") * xSensitivity;
         float xRotation = Input.GetAxis("Mouse Y") * ySensitivity;
 
-        cameraRotation *= Quaternion.Euler(-xRotation, 0, 0);
-        characterRotation *= Quaternion.Euler(0, yRotation, 0);
+        if (!InventoryActive) 
+        {
 
-        //cameraRotation = ClampRotationAroundXAxis(cameraRotation);
+            cameraRotation *= Quaternion.Euler(-xRotation, 0, 0);
+            characterRotation *= Quaternion.Euler(0, yRotation, 0);
 
-        this.transform.localRotation = characterRotation;
-        camera.transform.localRotation = cameraRotation; 
+            cameraRotation = ClampRotationAroundXAxis(cameraRotation);
+
+            this.transform.localRotation = characterRotation;
+            camera.transform.localRotation = cameraRotation;
+        }
+       
 
         x = Input.GetAxis("Horizontal") * speed;
         z = Input.GetAxis("Vertical") * speed;
 
+        
         //new Vector3(x * speed, 0 , z * speed);
         transform.position += camera.transform.forward * z + camera.transform.right * x;
 
-        //UpdateCursorLock();
+        UpdateCursorLock();
     }
 
     Quaternion ClampRotationAroundXAxis(Quaternion q)
