@@ -7,11 +7,6 @@ using UnityEngine.EventSystems;
 
 public class FPSController : MonoBehaviour
 {
-    //Testing
-    public float Hp_Min;
-    public float Hp_Max;
-    public Image barra;
-
 
     //Player class
     public InventoryObject inventory;
@@ -26,14 +21,14 @@ public class FPSController : MonoBehaviour
     public Slider healthbar;
     public Text ammoReserves;
     public AudioSource jumpSound;
-    public AudioSource shot;
+    //public AudioSource shot;
     public AudioSource landSound;
     public AudioSource[] steps;
     public AudioSource healthPick;
     public AudioSource ammoPick;
-    public AudioSource noAmmoSound;
+    //public AudioSource noAmmoSound;
     public AudioSource deathSound;
-    public AudioSource reloadSound;
+    //public AudioSource reloadSound;
     public GameObject camera;
     public Animator anim;
     readonly float speed = 0.10f;
@@ -59,10 +54,8 @@ public class FPSController : MonoBehaviour
     float x;
     float z;
 
-    int ammo = 80;
-    int maxAmmo = 80;
-    int ammoClip = 0;
-    int ammoClipMax = 12;
+    public Gun gun;
+
     public int health = 0;
     int maxHealth = 100;
 
@@ -81,6 +74,12 @@ public class FPSController : MonoBehaviour
 
     void OnTriggerEnter(Collider col)
     {
+
+        if (col.CompareTag("Boss"))
+        {
+            
+        }
+
         if (col.gameObject.tag == "Home")
         {
             Vector3 pos = new Vector3(this.transform.position.x,
@@ -124,17 +123,19 @@ public class FPSController : MonoBehaviour
                                          Terrain.activeTerrain.SampleHeight(this.transform.position),
                                          this.transform.position.z);
 
-            GameObject steve = Instantiate(stevePrefab, pos, this.transform.rotation);
-            steve.GetComponent<Animator>().SetTrigger("Death");
+            //GameObject steve = Instantiate(stevePrefab, pos, this.transform.rotation);
+            //steve.GetComponent<Animator>().SetTrigger("Death");
+
             GameStats.gameOver = true;
-            Destroy(this.gameObject);           
+            Destroy(this.gameObject);
+            Debug.Log("Dead");
         }
     }
     // Start is called before the first frame update
     void Start()
     {
-
-        for(int i = 0; i< attributes.Length; i++)
+        gun = FindObjectOfType<Gun>();
+        for (int i = 0; i< attributes.Length; i++)
         {
             attributes[i].SetParent(this);
         }
@@ -152,7 +153,6 @@ public class FPSController : MonoBehaviour
         characterRotation = this.transform.localRotation;
 
         health = maxHealth;
-        ammoClip = ammoClipMax;
         //healthbar.value = health;
         //ammoReserves.text = ammoClip+ "/" + ammo + "";
 
@@ -277,39 +277,6 @@ public class FPSController : MonoBehaviour
 
         }
 
-        //if (Input.GetMouseButtonDown(0) && !anim.GetBool("fire") && anim.GetBool("arm") && GameStats.canShoot && !anim.GetBool("reload"))
-        //{
-        //    if(ammoClip > 0)
-        //    {
-        //        anim.SetTrigger("fire");
-        //        ProcessZombieHit();
-        //        ammoClip--;
-        //        ammoReserves.text = ammoClip + "/" + ammo + "";
-        //        GameStats.canShoot = false;
-        //    }
-        //    else
-        //    {
-        //        noAmmoSound.Play();
-        //    }
-
-            
-        //    Debug.Log("Ammo Left in clip:" + ammoClip);
-        //}
-
-        if (Input.GetKeyDown(KeyCode.R) && anim.GetBool("arm"))
-        {           
-            anim.SetTrigger("reload");
-            reloadSound.Play();
-            int amount = ammoClipMax - ammoClip;
-            int amountAvailable = amount < ammo ? amount : ammo;
-            ammo -= amountAvailable;
-            ammoClip += amountAvailable;
-            ammoReserves.text = ammoClip + "/" + ammo + "";
-            GameStats.canShoot = false;
-            Debug.Log("Ammo Left" + ammo);
-            Debug.Log("Ammo in clip" + ammoClip);
-        }
-
         if(Mathf.Abs(x) > 0 || Mathf.Abs(z) > 0)
         {
             if (!anim.GetBool("moving"))
@@ -345,34 +312,6 @@ public class FPSController : MonoBehaviour
 
         previouslyGrounded = grounded;
 
-    }
-
-    void ProcessZombieHit()
-    {
-        RaycastHit hitInfo;
-        if(Physics.Raycast(shotDirection.position, shotDirection.forward, out hitInfo, 500))
-        {
-            GameObject hitZombie = hitInfo.collider.gameObject;
-            if(hitZombie.tag == "Zombie")
-            {
-                GameObject blood = Instantiate(bloodPrefab, hitInfo.point, Quaternion.identity);
-                blood.transform.LookAt(this.transform.position);
-                Destroy(blood, 0.5f);
-
-                if (Random.Range(0, 10) < 5)
-                {
-                    GameObject rdPrefab = hitZombie.GetComponent<ZombieController>().ragdoll;
-                    GameObject newRd = Instantiate(rdPrefab, hitZombie.transform.position, hitZombie.transform.rotation);
-                    newRd.transform.Find("Hips").GetComponent<Rigidbody>().AddForce(shotDirection.forward * 10000);
-                    Destroy(hitZombie);
-                }
-                else
-                {
-                    hitZombie.GetComponent<ZombieController>().KillZombie();
-                }
-                    
-            }
-        }
     }
 
     void PlaySteps()
@@ -442,10 +381,11 @@ public class FPSController : MonoBehaviour
     }
     void OnCollisionEnter(Collision col)
     {
-        if(col.gameObject.tag == "Ammo" && ammo < maxAmmo)
+        if(col.gameObject.tag == "Ammo" && gun.Ammo < gun.maxAmmoReserve)
         {
-            ammo = Mathf.Clamp(ammo + 12, 0, maxAmmo);
-            ammoReserves.text = ammoClip + "/" + ammo + "";
+
+            gun.Ammo = Mathf.Clamp(gun.Ammo + 50, 0, gun.maxAmmoReserve);
+            ammoReserves.text = gun.currentAmmo + "/" + gun.Ammo + "";
             //Debug.Log("Ammo: " + ammo);
             Destroy(col.gameObject);
             ammoPick.Play();

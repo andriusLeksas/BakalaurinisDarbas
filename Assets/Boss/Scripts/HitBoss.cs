@@ -11,7 +11,10 @@ public class HitBoss : MonoBehaviour
     {
         if (coll.CompareTag("Player"))
         {
-            coll.GetComponent<FPSController>().health -= damage;
+            var player = coll.GetComponent<FPSController>();
+            player.health -= damage;
+            player.healthbar.value = player.health;
+            Debug.Log("Player damage");
         }
     }
     // Start is called before the first frame update

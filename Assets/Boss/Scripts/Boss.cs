@@ -18,6 +18,11 @@ public class Boss : MonoBehaviour
     public GameObject[] hit;
     public int hit_select;
 
+    public Image healthbar;
+
+    public ParticleSystem spitFire;
+
+
     // Lanzallamas
     public bool lanza_llamas;
     public List<GameObject> pool = new List<GameObject>();
@@ -55,7 +60,8 @@ public class Boss : MonoBehaviour
 
     public void Comportamiento_Boss()
     {
-        if(Vector3.Distance(transform.position, target.transform.position) < 15)
+        Debug.Log("Comportamiento_Boss");
+        if (Vector3.Distance(transform.position, target.transform.position) < 50)
         {
             var lookPos = target.transform.position - transform.position;
             lookPos.y = 0;
@@ -63,12 +69,15 @@ public class Boss : MonoBehaviour
             point.transform.LookAt(target.transform.position);
             //musica.enabled = true;
 
-            if(Vector3.Distance(transform.position, target.transform.position) > 1 && !atacando)
+            if(Vector3.Distance(transform.position, target.transform.position) > 2 && !atacando)
             {
+                Debug.Log("Accesing Switch Rutina" + rutina);
                 switch (rutina)
-                {
+                {                  
                     //walk
                     case 0:
+                        
+                        Debug.Log(" trying to Walk case 0");
                         transform.rotation = Quaternion.RotateTowards(transform.rotation, rotation, 2);
                         ani.SetBool("walk", true);
                         ani.SetBool("run", false);
@@ -81,11 +90,14 @@ public class Boss : MonoBehaviour
                         ani.SetBool("attack", false);
 
                         cronometro += 1 * Time.deltaTime;
+
                         if(cronometro > time_rutinas)
                         {
                             rutina = Random.Range(0, 5);
                             cronometro = 0;
+                            Debug.Log("Walking cronometro > time_rutinas");
                         }
+
                         break;
 
                     case 1:
@@ -104,8 +116,8 @@ public class Boss : MonoBehaviour
                         break;
 
                     case 2:
-                        //if(fase == 2)
-                        //{
+                        if(fase == 2)
+                        {
                             //Lanzallamas                    
                             ani.SetBool("walk", false);
                             ani.SetBool("run", false);
@@ -113,12 +125,12 @@ public class Boss : MonoBehaviour
                             ani.SetFloat("skills", 0.8f);
                             transform.rotation = Quaternion.RotateTowards(transform.rotation, rotation, 2);
                             rango.GetComponent<CapsuleCollider>().enabled = false;
-                        //}
+                        }
                         //else
                         //{
                         //    rutina = 0;
                         //    cronometro = 0;
-                        //}                                    
+                        //}
 
                         break;
 
@@ -141,7 +153,7 @@ public class Boss : MonoBehaviour
                                     transform.rotation = Quaternion.RotateTowards(transform.rotation, rotation, 2);
                                 }
 
-                                transform.Translate(Vector3.forward * 8 * Time.deltaTime);
+                                transform.Translate(Vector3.forward * 12 * Time.deltaTime);
                             }
                             else
                             {
@@ -155,20 +167,20 @@ public class Boss : MonoBehaviour
 
                     case 4:
                         //FireBall
-                        if(fase == 2)
-                        {
+                        //if(fase == 2)
+                        //{
                             ani.SetBool("walk", false);
                             ani.SetBool("run", false);
                             ani.SetBool("attack", true);
                             ani.SetFloat("skills", 1);
                             rango.GetComponent<CapsuleCollider>().enabled = false;
                             transform.rotation = Quaternion.RotateTowards(transform.rotation, rotation, 0.5f);                      
-                        }
-                        else
-                        {
-                            rutina = 0;
-                            cronometro = 0;
-                        }                     
+                        //}
+                        //else
+                        //{
+                        //    rutina = 0;
+                        //    cronometro = 0;
+                        //}                     
 
                         break;
 
@@ -181,8 +193,19 @@ public class Boss : MonoBehaviour
               
     }
 
+    public void TakeDamage(float amount)
+    {
+        Hp_Min -= amount;
+        if (Hp_Min <= 0f)
+        {
+            muerto = true;
+            //ani.SetBool("Dead", true);
+        }
+    }
+
     public void Final_Ani()
     {
+        Debug.Log("Final Ani ");
         rutina = 0;
         ani.SetBool("attack", false);
         atacando = false;
@@ -242,11 +265,14 @@ public class Boss : MonoBehaviour
 
     public void Start_fire()
     {
-        lanza_llamas = true;
+        spitFire.Play();
+        lanza_llamas = true;       
     }
     public void Stop_Fire()
     {
+        spitFire.Stop();
         lanza_llamas = false;
+        
     }
 
     public GameObject Get_Fire_Ball()
@@ -273,7 +299,9 @@ public class Boss : MonoBehaviour
 
     public void Vivo()
     {
-        if(Hp_Min < 500)
+
+        Debug.Log("Call Vivo" + rutina);
+        if (Hp_Min < 500)
         {
             fase = 2;
             time_rutinas = 1;
@@ -290,10 +318,13 @@ public class Boss : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        if(target == null)
+        if (target == null)
         {
             target = GameObject.Find("Character");
         }
+
+        healthbar.fillAmount = Hp_Min / Hp_Max;
+        
             
         //barra.fillAmount = Hp_Min / Hp_Max;
         if (Hp_Min > 0)

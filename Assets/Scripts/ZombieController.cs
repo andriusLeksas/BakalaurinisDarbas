@@ -5,6 +5,7 @@ using UnityEngine.AI;
 
 public class ZombieController : MonoBehaviour
 {
+    public float health = 30f;
     public GameObject target;
     public float walkingSpeed;
     public float runningSpeed;
@@ -78,6 +79,15 @@ public class ZombieController : MonoBehaviour
         }
             
         return false;
+    }
+
+    public void TakeDamage(float amount)
+    {
+        health -= amount;
+        if (health <= 0f)
+        {
+            KillZombie();
+        }
     }
 
     public void KillZombie()
