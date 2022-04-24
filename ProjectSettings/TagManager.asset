@@ -12,6 +12,7 @@ TagManager:
   - Home
   - Inventory
   - Boss
+  - SpawnPoint
   layers:
   - Default
   - TransparentFX
@@ -22,7 +23,7 @@ TagManager:
   - 
   - 
   - Zombie
-  - 
+  - Checkpoints
   - 
   - 
   - 

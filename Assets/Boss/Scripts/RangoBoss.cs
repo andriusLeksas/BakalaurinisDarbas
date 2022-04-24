@@ -17,22 +17,22 @@ public class RangoBoss : MonoBehaviour
 
             switch (melee)
             {
-                //golp1
+                
                 case 0:
                     ani.SetFloat("skills", 0);
                     boss.hit_select = 0;
                     break;
-                //golp2
+                
                 case 1:
                     ani.SetFloat("skills", 0.2f);
                     boss.hit_select = 1;
                     break;
-                //jump
+                
                 case 2:
                     ani.SetFloat("skills", 0.4f);
                     boss.hit_select = 2;
                     break;
-                //fireBall
+                
                 case 3:
                     if(boss.fase == 2)
                     {

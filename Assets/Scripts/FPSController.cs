@@ -7,7 +7,14 @@ using UnityEngine.EventSystems;
 
 public class FPSController : MonoBehaviour
 {
+    public int lives = 3;
+    int timesDied = 0;
 
+    public CompassScript compass;
+    public GameObject[] checkPoints;
+    int currentCheckpoint = 0;
+
+    Vector3 startPosition;
     //Player class
     public InventoryObject inventory;
     public InventoryObject equipement;
@@ -74,10 +81,15 @@ public class FPSController : MonoBehaviour
 
     void OnTriggerEnter(Collider col)
     {
-
-        if (col.CompareTag("Boss"))
+        if(col.gameObject.tag == "SpawnPoint")
         {
-            
+            startPosition = this.transform.position;
+           
+            if(col.gameObject == checkPoints[currentCheckpoint])
+            {
+                currentCheckpoint++;
+                compass.target = checkPoints[currentCheckpoint];
+            }
         }
 
         if (col.gameObject.tag == "Home")
@@ -107,8 +119,13 @@ public class FPSController : MonoBehaviour
         }
     }
 
+    GameObject steve;
+
     public void TakeHit(float amount)
     {
+
+        if (GameStats.gameOver) return;
+
         health = (int)(Mathf.Clamp(health - amount, 0, maxHealth));
         healthbar.value = health;
 
@@ -123,17 +140,43 @@ public class FPSController : MonoBehaviour
                                          Terrain.activeTerrain.SampleHeight(this.transform.position),
                                          this.transform.position.z);
 
-            //GameObject steve = Instantiate(stevePrefab, pos, this.transform.rotation);
-            //steve.GetComponent<Animator>().SetTrigger("Death");
+            steve = Instantiate(stevePrefab, pos, this.transform.rotation);
+            steve.GetComponent<Animator>().SetTrigger("Death");
 
             GameStats.gameOver = true;
-            Destroy(this.gameObject);
-            Debug.Log("Dead");
+            //steve.GetComponent<AudioSource>().enabled = false;
+            timesDied++;
+
+            if (timesDied == lives)
+            {
+                Destroy(this.gameObject);
+            }
+            else
+            {
+                steve.GetComponent<GoToMainMenu>().enabled = false;
+                camera.SetActive(false);
+                Invoke("Respawn", 4);
+                Debug.Log("ShouldRespawn");
+            }
+            
         }
     }
+
+    void Respawn()
+    {
+        Destroy(steve);
+        camera.SetActive(true);
+        GameStats.gameOver = false;
+        health = maxHealth;
+        healthbar.value = health;
+        this.transform.position = startPosition;
+    }
+
     // Start is called before the first frame update
     void Start()
     {
+        startPosition = this.transform.position;
+
         gun = FindObjectOfType<Gun>();
         for (int i = 0; i< attributes.Length; i++)
         {
@@ -165,6 +208,8 @@ public class FPSController : MonoBehaviour
             inventories[i].transform.position = new Vector3(inventories[i].transform.position.x, inventories[i].transform.position.y - 1000
                 , inventories[i].transform.position.z);
         }
+
+        compass.target = checkPoints[0];
     }
 
     public void OnBeforeSlotUpdate(InventorySlot _slot)
@@ -240,6 +285,36 @@ public class FPSController : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
+        //Home Village
+        if (Input.GetKeyDown(KeyCode.Z))
+        {
+            this.transform.position = new Vector3(939, 1.89f, 85.3f);
+        }
+
+        //Village2
+
+        if (Input.GetKeyDown(KeyCode.X))
+        {
+            this.transform.position = new Vector3(852, 3.4f, 440);
+        }
+
+        //Village 3
+        if (Input.GetKeyDown(KeyCode.C))
+        {
+            this.transform.position = new Vector3(647.45f, 6.78f, 238.22f);
+        }
+
+        //Village 4
+        if (Input.GetKeyDown(KeyCode.V))
+        {
+            this.transform.position = new Vector3(359.13f, 6.36f, 699f);
+        }
+
+        //Village 5
+        if (Input.GetKeyDown(KeyCode.B))
+        {
+            this.transform.position = new Vector3(314.83f, 3.36f, 419f);
+        }
 
 
         if (Input.GetKeyDown(KeyCode.F))
@@ -249,6 +324,7 @@ public class FPSController : MonoBehaviour
 
         if (Input.GetKeyDown(KeyCode.I) && !InventoryActive)
         {
+            gun.enabled = false;
             //Debug.Log("I pressed set active");
             for (int i = 0; i < inventories.Length; i++)
             {
@@ -263,7 +339,7 @@ public class FPSController : MonoBehaviour
 
         }else if (Input.GetKeyDown(KeyCode.I) && InventoryActive)
         {
-            
+            gun.enabled = true;
             for (int i = 0; i < inventories.Length; i++)
             {
 

@@ -7,6 +7,7 @@ public class Gun : MonoBehaviour
 {
     public Animator anim;
     public GameObject bloodPrefab;
+    public LayerMask checkPointLayer;
 
     public float damage = 10f;
     public float range = 100f;
@@ -118,7 +119,7 @@ public class Gun : MonoBehaviour
 
 
         RaycastHit hitInfo;
-        if (Physics.Raycast(fpsCam.transform.position, fpsCam.transform.forward, out hitInfo, range))
+        if (Physics.Raycast(fpsCam.transform.position, fpsCam.transform.forward, out hitInfo, range, ~checkPointLayer))
         {
             GameObject hitZombie = hitInfo.collider.gameObject;
             if (hitZombie.tag == "Zombie")

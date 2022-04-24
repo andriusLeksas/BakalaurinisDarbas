@@ -5,6 +5,7 @@ using UnityEngine.AI;
 
 public class ZombieController : MonoBehaviour
 {
+    public GameObject[] itemArray;
     public float health = 30f;
     public GameObject target;
     public float walkingSpeed;
@@ -63,7 +64,7 @@ public class ZombieController : MonoBehaviour
 
     bool CanSeePlayer()
     {
-        if (DistanceToPlayer() < 10)
+        if (DistanceToPlayer() < 25)
         {
             return true;
         }
@@ -86,12 +87,23 @@ public class ZombieController : MonoBehaviour
         health -= amount;
         if (health <= 0f)
         {
+            Vector3 pos = new Vector3(this.transform.position.x,
+                                      Terrain.activeTerrain.SampleHeight(this.transform.position) + 1,
+                                      this.transform.position.z);
+
+            //if(Random.Range(0,10) < 5)
+            //{
+                GameObject item = Instantiate(itemArray[Random.Range(0, 3)], pos, this.transform.rotation);
+                item.GetComponentInChildren<Billboard>()._camera = FindObjectOfType<Camera>();
+            //}         
+
             KillZombie();
         }
     }
 
     public void KillZombie()
     {
+       
         TurnOffTriggers();
         anim.SetBool("isDead", true);
         state = STATE.DEAD;

@@ -45,6 +45,7 @@ public class SpawnController : MonoBehaviour
         if (!spawnOnStart && other.gameObject.tag == "Player")
         {
             spawnAll();
+            Destroy(this.gameObject);
         }
         
     }

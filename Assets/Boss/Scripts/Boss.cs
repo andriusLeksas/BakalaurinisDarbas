@@ -61,7 +61,7 @@ public class Boss : MonoBehaviour
     public void Comportamiento_Boss()
     {
         Debug.Log("Comportamiento_Boss");
-        if (Vector3.Distance(transform.position, target.transform.position) < 50)
+        if (Vector3.Distance(transform.position, target.transform.position) < 30)
         {
             var lookPos = target.transform.position - transform.position;
             lookPos.y = 0;
@@ -74,7 +74,7 @@ public class Boss : MonoBehaviour
                 Debug.Log("Accesing Switch Rutina" + rutina);
                 switch (rutina)
                 {                  
-                    //walk
+                    
                     case 0:
                         
                         Debug.Log(" trying to Walk case 0");
@@ -85,6 +85,17 @@ public class Boss : MonoBehaviour
                         if(transform.rotation == rotation)
                         {
                             transform.Translate(Vector3.forward * speed * Time.deltaTime);
+                        }
+                        else
+                        {
+                            transform.rotation = Quaternion.RotateTowards(transform.rotation, rotation, 2);
+                            if (transform.rotation == rotation)
+                            {
+                                transform.Translate(Vector3.forward * speed * Time.deltaTime);
+                            }
+
+                            return;
+
                         }
 
                         ani.SetBool("attack", false);
@@ -101,7 +112,7 @@ public class Boss : MonoBehaviour
                         break;
 
                     case 1:
-                        //run
+                        
                         transform.rotation = Quaternion.RotateTowards(transform.rotation, rotation, 2);
                         ani.SetBool("walk", false);
                         ani.SetBool("run", true);
@@ -116,27 +127,28 @@ public class Boss : MonoBehaviour
                         break;
 
                     case 2:
-                        if(fase == 2)
+                        if(fase == 3)
                         {
-                            //Lanzallamas                    
+                                              
                             ani.SetBool("walk", false);
                             ani.SetBool("run", false);
                             ani.SetBool("attack", true);
                             ani.SetFloat("skills", 0.8f);
                             transform.rotation = Quaternion.RotateTowards(transform.rotation, rotation, 2);
                             rango.GetComponent<CapsuleCollider>().enabled = false;
+
                         }
-                        //else
-                        //{
-                        //    rutina = 0;
-                        //    cronometro = 0;
-                        //}
+                        else
+                        {
+                            rutina = 0;
+                            cronometro = 0;
+                        }
 
                         break;
 
                     case 3:
-                        //JumpAttack
-                        if(fase == 2)
+                        
+                        if(fase == 3)
                         {
                             jump_distance += 1 * Time.deltaTime;
                             ani.SetBool("walk", false);
@@ -154,33 +166,33 @@ public class Boss : MonoBehaviour
                                 }
 
                                 transform.Translate(Vector3.forward * 12 * Time.deltaTime);
-                            }
-                            else
-                            {
-                                rutina = 0;
-                                cronometro = 0;
-                            }
+                            }                          
 
-                        }                    
+                        }
+                        else
+                        {
+                            rutina = 0;
+                            cronometro = 0;
+                        }
 
                         break;
 
                     case 4:
-                        //FireBall
-                        //if(fase == 2)
-                        //{
+                        
+                        if (fase == 2)
+                        {
                             ani.SetBool("walk", false);
                             ani.SetBool("run", false);
                             ani.SetBool("attack", true);
                             ani.SetFloat("skills", 1);
                             rango.GetComponent<CapsuleCollider>().enabled = false;
-                            transform.rotation = Quaternion.RotateTowards(transform.rotation, rotation, 0.5f);                      
-                        //}
-                        //else
-                        //{
-                        //    rutina = 0;
-                        //    cronometro = 0;
-                        //}                     
+                            transform.rotation = Quaternion.RotateTowards(transform.rotation, rotation, 0.5f);
+                        }
+                        else
+                        {
+                            rutina = 0;
+                            cronometro = 0;
+                        }
 
                         break;
 
@@ -199,7 +211,8 @@ public class Boss : MonoBehaviour
         if (Hp_Min <= 0f)
         {
             muerto = true;
-            //ani.SetBool("Dead", true);
+            ani.SetTrigger("dead");
+            Destroy(this.gameObject, 10f);
         }
     }
 
@@ -285,6 +298,7 @@ public class Boss : MonoBehaviour
                 return pool2[i];
             }
         }
+
         GameObject obj = Instantiate(fire_ball, point.transform.position, point.transform.rotation) as GameObject;
         pool2.Add(obj);
         return obj;
@@ -324,9 +338,7 @@ public class Boss : MonoBehaviour
         }
 
         healthbar.fillAmount = Hp_Min / Hp_Max;
-        
-            
-        //barra.fillAmount = Hp_Min / Hp_Max;
+                         
         if (Hp_Min > 0)
         {
             Vivo();

@@ -2267,6 +2267,11 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: caca23f5df3ed1c4c877f94f38904ca9, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  itemArray:
+  - {fileID: 3923602313571035676, guid: 6dbbe902af32c4e429d478d7b28fe6bc, type: 3}
+  - {fileID: 6277786227652748690, guid: b53d7cfa641eaab4f858166956c0e2cd, type: 3}
+  - {fileID: 165310, guid: 4cdcc6c16809ba5439c8798d9bb925f4, type: 3}
+  health: 30
   target: {fileID: 0}
   walkingSpeed: 1
   runningSpeed: 2
@@ -2810,6 +2815,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   sound: {fileID: 1988182214}
+  sound3D: 1
   randomMin: 1
   randomMax: 200
 --- !u!1 &8889811393416137658

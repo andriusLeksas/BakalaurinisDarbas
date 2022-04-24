@@ -13,6 +13,8 @@ public class AllButtons : MonoBehaviour
         if (gController == null) return;
         AudioSource music = gController.GetComponent<AudioSource>();
         music.volume = musicSlider.value;
+        Cursor.lockState = CursorLockMode.None;
+        Cursor.visible = true;
     }
     public void ExitScene()
     {
