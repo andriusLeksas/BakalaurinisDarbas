@@ -38,7 +38,7 @@ public class DashScript : MonoBehaviour
 
         if(isTryingToDash && !isDashing)
         {
-            if(dashAttempts <= 50)
+            if(dashAttempts <= 200)
             {
                 OnStartDash();
             }
