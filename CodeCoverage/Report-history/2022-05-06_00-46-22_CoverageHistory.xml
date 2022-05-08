@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<coverage version="1.0" date="2022-05-06_00-46-22" tag="">
+  <assembly name="Assembly-CSharp-Editor">
+    <class name="enemyTests" coveredlines="155" coverablelines="160" totallines="309" coveredbranches="0" totalbranches="0" />
+    <class name="playerTests" coveredlines="22" coverablelines="22" totallines="67" coveredbranches="0" totalbranches="0" />
+  </assembly>
+  <assembly name="Assembly-CSharp-Editor-firstpass">
+    <class name="GitHub.Unity.ExtensionLoader" coveredlines="0" coverablelines="48" totallines="93" coveredbranches="0" totalbranches="0" />
+    <class name="GitHub.Unity.UnityAPIWrapper" coveredlines="0" coverablelines="5" totallines="20" coveredbranches="0" totalbranches="0" />
+  </assembly>
+</coverage>

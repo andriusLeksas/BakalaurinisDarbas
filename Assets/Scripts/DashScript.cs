@@ -36,18 +36,20 @@ public class DashScript : MonoBehaviour
     {
         bool isTryingToDash = Input.GetKeyDown(KeyCode.LeftShift);
 
-        if(isTryingToDash && !isDashing)
+        if (playerController.AbillityArray[0])
         {
-            if(dashAttempts <= 200)
+            if (isTryingToDash && !isDashing)
             {
-                OnStartDash();
+                if (dashAttempts <= 200)
+                {
+                    OnStartDash();
+                }
             }
-        }
 
-        if (isDashing)
-        {
-            if(Time.time - dashStartTime <= 0.4f)
+            if (isDashing)
             {
+                if (Time.time - dashStartTime <= 0.4f)
+                {
 
                     //player is not giving input just dash for
                     x = Input.GetAxis("Horizontal") * 0.5f;
@@ -56,12 +58,14 @@ public class DashScript : MonoBehaviour
                     //new Vector3(x * speed, 0 , z * speed);
                     transform.position += camera.transform.forward * z + camera.transform.right * x;
 
-            }
-            else
-            {
-                OnEndDash();
+                }
+                else
+                {
+                    OnEndDash();
+                }
             }
         }
+        
     }
 
     void OnStartDash()

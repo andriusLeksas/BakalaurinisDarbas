@@ -1,0 +1,83 @@
+<?xml version="1.0" encoding="utf-8"?>
+<CoverageReport scope="Summary">
+  <Summary>
+    <Generatedon>06/05/2022 - 01:12:31</Generatedon>
+    <Parser>OpenCoverParser</Parser>
+    <Assemblies>3</Assemblies>
+    <Classes>55</Classes>
+    <Files>49</Files>
+    <Coveredlines>415</Coveredlines>
+    <Uncoveredlines>1785</Uncoveredlines>
+    <Coverablelines>2200</Coverablelines>
+    <Totallines>4092</Totallines>
+    <Linecoverage>18.8</Linecoverage>
+    <Coveredbranches>0</Coveredbranches>
+    <Totalbranches>0</Totalbranches>
+    <Coveredmethods>58</Coveredmethods>
+    <Totalmethods>253</Totalmethods>
+    <Methodcoverage>22.9</Methodcoverage>
+  </Summary>
+  <Coverage>
+    <Assembly name="Assembly-CSharp" classes="51" coverage="10.6" coveredlines="206" coverablelines="1937" totallines="4485" branchcoverage="" coveredbranches="0" totalbranches="0" coveredmethods="32" totalmethods="218" methodcoverage="14.6">
+      <Class name="AllButtons" coverage="0" coveredlines="0" coverablelines="22" totallines="40" branchcoverage="" coveredbranches="0" totalbranches="0" coveredmethods="0" totalmethods="5" methodcoverage="0" />
+      <Class name="Billboard" coverage="0" coveredlines="0" coverablelines="6" totallines="18" branchcoverage="" coveredbranches="0" totalbranches="0" coveredmethods="0" totalmethods="2" methodcoverage="0" />
+      <Class name="Blast" coverage="0" coveredlines="0" coverablelines="86" totallines="143" branchcoverage="" coveredbranches="0" totalbranches="0" coveredmethods="0" totalmethods="6" methodcoverage="0" />
+      <Class name="Boss" coverage="30.3" coveredlines="65" coverablelines="214" totallines="368" branchcoverage="" coveredbranches="0" totalbranches="0" coveredmethods="4" totalmethods="17" methodcoverage="23.5" />
+      <Class name="BossSkills" coverage="0" coveredlines="0" coverablelines="33" totallines="67" branchcoverage="" coveredbranches="0" totalbranches="0" coveredmethods="0" totalmethods="3" methodcoverage="0" />
+      <Class name="CompassScript" coverage="0" coveredlines="0" coverablelines="15" totallines="35" branchcoverage="" coveredbranches="0" totalbranches="0" coveredmethods="0" totalmethods="2" methodcoverage="0" />
+      <Class name="DashScript" coverage="0" coveredlines="0" coverablelines="66" totallines="123" branchcoverage="" coveredbranches="0" totalbranches="0" coveredmethods="0" totalmethods="6" methodcoverage="0" />
+      <Class name="defaultObject" coverage="0" coveredlines="0" coverablelines="3" totallines="12" branchcoverage="" coveredbranches="0" totalbranches="0" coveredmethods="0" totalmethods="1" methodcoverage="0" />
+      <Class name="DynamicInterface" coverage="0" coveredlines="0" coverablelines="18" totallines="40" branchcoverage="" coveredbranches="0" totalbranches="0" coveredmethods="0" totalmethods="2" methodcoverage="0" />
+      <Class name="EquipementObject" coverage="0" coveredlines="0" coverablelines="2" totallines="12" branchcoverage="" coveredbranches="0" totalbranches="0" coveredmethods="0" totalmethods="1" methodcoverage="0" />
+      <Class name="ExtensionMethods" coverage="0" coveredlines="0" coverablelines="16" totallines="161" branchcoverage="" coveredbranches="0" totalbranches="0" coveredmethods="0" totalmethods="1" methodcoverage="0" />
+      <Class name="Fire_Ball" coverage="0" coveredlines="0" coverablelines="13" totallines="34" branchcoverage="" coveredbranches="0" totalbranches="0" coveredmethods="0" totalmethods="2" methodcoverage="0" />
+      <Class name="FPSController" coverage="9.4" coveredlines="36" coverablelines="381" totallines="609" branchcoverage="" coveredbranches="0" totalbranches="0" coveredmethods="3" totalmethods="21" methodcoverage="14.2" />
+      <Class name="GameController" coverage="0" coveredlines="0" coverablelines="15" totallines="35" branchcoverage="" coveredbranches="0" totalbranches="0" coveredmethods="0" totalmethods="4" methodcoverage="0" />
+      <Class name="GameStats" coverage="100" coveredlines="2" coverablelines="2" totallines="9" branchcoverage="" coveredbranches="0" totalbranches="0" coveredmethods="1" totalmethods="1" methodcoverage="100" />
+      <Class name="GoToMainMenu" coverage="0" coveredlines="0" coverablelines="6" totallines="19" branchcoverage="" coveredbranches="0" totalbranches="0" coveredmethods="0" totalmethods="2" methodcoverage="0" />
+      <Class name="GroundItem" coverage="100" coveredlines="6" coverablelines="6" totallines="22" branchcoverage="" coveredbranches="0" totalbranches="0" coveredmethods="2" totalmethods="2" methodcoverage="100" />
+      <Class name="Gun" coverage="33.6" coveredlines="31" coverablelines="92" totallines="162" branchcoverage="" coveredbranches="0" totalbranches="0" coveredmethods="5" totalmethods="6" methodcoverage="83.3" />
+      <Class name="HealthObject" coverage="0" coveredlines="0" coverablelines="3" totallines="12" branchcoverage="" coveredbranches="0" totalbranches="0" coveredmethods="0" totalmethods="1" methodcoverage="0" />
+      <Class name="HitBoss" coverage="0" coveredlines="0" coverablelines="13" totallines="31" branchcoverage="" coveredbranches="0" totalbranches="0" coveredmethods="0" totalmethods="3" methodcoverage="0" />
+      <Class name="Inventory" coverage="0" coveredlines="0" coverablelines="7" totallines="254" branchcoverage="" coveredbranches="0" totalbranches="0" coveredmethods="0" totalmethods="2" methodcoverage="0" />
+      <Class name="InventoryObject" coverage="0" coveredlines="0" coverablelines="84" totallines="254" branchcoverage="" coveredbranches="0" totalbranches="0" coveredmethods="0" totalmethods="10" methodcoverage="0" />
+      <Class name="InventorySlot" coverage="0" coveredlines="0" coverablelines="46" totallines="254" branchcoverage="" coveredbranches="0" totalbranches="0" coveredmethods="0" totalmethods="7" methodcoverage="0" />
+      <Class name="Item" coverage="0" coveredlines="0" coverablelines="16" totallines="90" branchcoverage="" coveredbranches="0" totalbranches="0" coveredmethods="0" totalmethods="2" methodcoverage="0" />
+      <Class name="ItemBuff" coverage="0" coveredlines="0" coverablelines="12" totallines="90" branchcoverage="" coveredbranches="0" totalbranches="0" coveredmethods="0" totalmethods="3" methodcoverage="0" />
+      <Class name="ItemDatabaseObject" coverage="0" coveredlines="0" coverablelines="11" totallines="24" branchcoverage="" coveredbranches="0" totalbranches="0" coveredmethods="0" totalmethods="3" methodcoverage="0" />
+      <Class name="ItemObject" coverage="0" coveredlines="0" coverablelines="5" totallines="90" branchcoverage="" coveredbranches="0" totalbranches="0" coveredmethods="0" totalmethods="2" methodcoverage="0" />
+      <Class name="MakeRadarObject" coverage="0" coveredlines="0" coverablelines="8" totallines="24" branchcoverage="" coveredbranches="0" totalbranches="0" coveredmethods="0" totalmethods="3" methodcoverage="0" />
+      <Class name="ModifiableInt" coverage="0" coveredlines="0" coverablelines="48" totallines="90" branchcoverage="" coveredbranches="0" totalbranches="0" coveredmethods="0" totalmethods="10" methodcoverage="0" />
+      <Class name="MoveFireBall" coverage="0" coveredlines="0" coverablelines="11" totallines="25" branchcoverage="" coveredbranches="0" totalbranches="0" coveredmethods="0" totalmethods="2" methodcoverage="0" />
+      <Class name="PushAbility" coverage="0" coveredlines="0" coverablelines="67" totallines="121" branchcoverage="" coveredbranches="0" totalbranches="0" coveredmethods="0" totalmethods="4" methodcoverage="0" />
+      <Class name="Radar" coverage="2.5" coveredlines="1" coverablelines="39" totallines="74" branchcoverage="" coveredbranches="0" totalbranches="0" coveredmethods="1" totalmethods="6" methodcoverage="16.6" />
+      <Class name="RadarObject" coverage="0" coveredlines="0" coverablelines="2" totallines="74" branchcoverage="" coveredbranches="0" totalbranches="0" coveredmethods="0" totalmethods="4" methodcoverage="0" />
+      <Class name="RandomSounds" coverage="5.2" coveredlines="1" coverablelines="19" totallines="38" branchcoverage="" coveredbranches="0" totalbranches="0" coveredmethods="1" totalmethods="3" methodcoverage="33.3" />
+      <Class name="SinkingScript" coverage="4.3" coveredlines="1" coverablelines="23" totallines="39" branchcoverage="" coveredbranches="0" totalbranches="0" coveredmethods="1" totalmethods="4" methodcoverage="25" />
+      <Class name="SoundController" coverage="0" coveredlines="0" coverablelines="10" totallines="29" branchcoverage="" coveredbranches="0" totalbranches="0" coveredmethods="0" totalmethods="4" methodcoverage="0" />
+      <Class name="SpawnController" coverage="3.7" coveredlines="1" coverablelines="27" totallines="53" branchcoverage="" coveredbranches="0" totalbranches="0" coveredmethods="1" totalmethods="4" methodcoverage="25" />
+      <Class name="StaticInterface" coverage="0" coveredlines="0" coverablelines="14" totallines="31" branchcoverage="" coveredbranches="0" totalbranches="0" coveredmethods="0" totalmethods="1" methodcoverage="0" />
+      <Class name="Target" coverage="0" coveredlines="0" coverablelines="15" totallines="35" branchcoverage="" coveredbranches="0" totalbranches="0" coveredmethods="0" totalmethods="5" methodcoverage="0" />
+      <Class name="UnityStandardAssets.Effects.AfterburnerPhysicsForce" coverage="0" coveredlines="0" coverablelines="38" totallines="68" branchcoverage="" coveredbranches="0" totalbranches="0" coveredmethods="0" totalmethods="4" methodcoverage="0" />
+      <Class name="UnityStandardAssets.Effects.ExplosionFireAndDebris" coverage="0" coveredlines="0" coverablelines="43" totallines="69" branchcoverage="" coveredbranches="0" totalbranches="0" coveredmethods="0" totalmethods="3" methodcoverage="0" />
+      <Class name="UnityStandardAssets.Effects.ExplosionPhysicsForce" coverage="0" coveredlines="0" coverablelines="19" totallines="37" branchcoverage="" coveredbranches="0" totalbranches="0" coveredmethods="0" totalmethods="2" methodcoverage="0" />
+      <Class name="UnityStandardAssets.Effects.ExtinguishableParticleSystem" coverage="0" coveredlines="0" coverablelines="11" totallines="29" branchcoverage="" coveredbranches="0" totalbranches="0" coveredmethods="0" totalmethods="3" methodcoverage="0" />
+      <Class name="UnityStandardAssets.Effects.FireLight" coverage="0" coveredlines="0" coverablelines="19" totallines="40" branchcoverage="" coveredbranches="0" totalbranches="0" coveredmethods="0" totalmethods="4" methodcoverage="0" />
+      <Class name="UnityStandardAssets.Effects.Hose" coverage="0" coveredlines="0" coverablelines="17" totallines="37" branchcoverage="" coveredbranches="0" totalbranches="0" coveredmethods="0" totalmethods="2" methodcoverage="0" />
+      <Class name="UnityStandardAssets.Effects.ParticleSystemMultiplier" coverage="0" coveredlines="0" coverablelines="13" totallines="27" branchcoverage="" coveredbranches="0" totalbranches="0" coveredmethods="0" totalmethods="2" methodcoverage="0" />
+      <Class name="UnityStandardAssets.Effects.SmokeParticles" coverage="0" coveredlines="0" coverablelines="4" totallines="18" branchcoverage="" coveredbranches="0" totalbranches="0" coveredmethods="0" totalmethods="1" methodcoverage="0" />
+      <Class name="UnityStandardAssets.Effects.WaterHoseParticles" coverage="0" coveredlines="0" coverablelines="25" totallines="49" branchcoverage="" coveredbranches="0" totalbranches="0" coveredmethods="0" totalmethods="3" methodcoverage="0" />
+      <Class name="UserInterface" coverage="1.2" coveredlines="1" coverablelines="78" totallines="161" branchcoverage="" coveredbranches="0" totalbranches="0" coveredmethods="1" totalmethods="12" methodcoverage="8.3" />
+      <Class name="WeaponSwitching" coverage="1.6" coveredlines="1" coverablelines="61" totallines="93" branchcoverage="" coveredbranches="0" totalbranches="0" coveredmethods="1" totalmethods="4" methodcoverage="25" />
+      <Class name="ZombieController" coverage="45.1" coveredlines="60" coverablelines="133" totallines="216" branchcoverage="" coveredbranches="0" totalbranches="0" coveredmethods="11" totalmethods="11" methodcoverage="100" />
+    </Assembly>
+    <Assembly name="Assembly-CSharp-Editor" classes="2" coverage="99.5" coveredlines="209" coverablelines="210" totallines="417" branchcoverage="" coveredbranches="0" totalbranches="0" coveredmethods="26" totalmethods="26" methodcoverage="100">
+      <Class name="enemyTests" coverage="100" coveredlines="160" coverablelines="160" totallines="309" branchcoverage="" coveredbranches="0" totalbranches="0" coveredmethods="19" totalmethods="19" methodcoverage="100" />
+      <Class name="playerTests" coverage="98" coveredlines="49" coverablelines="50" totallines="108" branchcoverage="" coveredbranches="0" totalbranches="0" coveredmethods="7" totalmethods="7" methodcoverage="100" />
+    </Assembly>
+    <Assembly name="Assembly-CSharp-Editor-firstpass" classes="2" coverage="0" coveredlines="0" coverablelines="53" totallines="113" branchcoverage="" coveredbranches="0" totalbranches="0" coveredmethods="0" totalmethods="9" methodcoverage="0">
+      <Class name="GitHub.Unity.ExtensionLoader" coverage="0" coveredlines="0" coverablelines="48" totallines="93" branchcoverage="" coveredbranches="0" totalbranches="0" coveredmethods="0" totalmethods="8" methodcoverage="0" />
+      <Class name="GitHub.Unity.UnityAPIWrapper" coverage="0" coveredlines="0" coverablelines="5" totallines="20" branchcoverage="" coveredbranches="0" totalbranches="0" coveredmethods="0" totalmethods="1" methodcoverage="0" />
+    </Assembly>
+  </Coverage>
+</CoverageReport>

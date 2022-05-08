@@ -9,7 +9,10 @@ public class FPSController : MonoBehaviour
 {
     public int lives = 3;
     int timesDied = 0;
+    public Text textToDisplay;
 
+    public GameObject pushAbilityPrefab;
+    public GameObject BlastPrefab;
     public CompassScript compass;
     public GameObject[] checkPoints;
     int currentCheckpoint = 0;
@@ -44,8 +47,8 @@ public class FPSController : MonoBehaviour
     float minX = -90;
     float maxX = 90;
     Rigidbody rb;
-    CapsuleCollider cap;
-    bool InventoryActive = false;
+    public CapsuleCollider cap;
+    public bool InventoryActive = false;
     GameObject[] inventories;
 
     public GameObject canvas;
@@ -58,16 +61,25 @@ public class FPSController : MonoBehaviour
     bool cursorIsLocked = true;
     bool lockCursor = true;
 
-    float x;
-    float z;
+    public float x;
+    public float z;
 
     public Gun gun;
 
     public int health = 0;
     int maxHealth = 100;
 
-    bool playingWalking = false;
+    public bool playingWalking = false;
     bool previouslyGrounded = true;
+
+    public bool[] AbillityArray = new bool[3];
+    public int AbillityCount = 0;
+
+    IEnumerator WaitTextTime()
+    {
+        yield return new WaitForSeconds(5);
+        textToDisplay.enabled = false;
+    }
 
     public void AttributeModified(Attribute attribute)
     {
@@ -79,13 +91,41 @@ public class FPSController : MonoBehaviour
         equipement.Clear();
     }
 
-    void OnTriggerEnter(Collider col)
+    public void OnTriggerEnter(Collider col)
     {
-        if(col.gameObject.tag == "SpawnPoint")
+        if (col.gameObject.tag == "Vacinee")
+        {
+            AbillityArray[AbillityCount] = true;
+            if(AbillityCount == 0)
+            {
+                textToDisplay.text = "You have succesfully found the first vaccine dose, now you can use Dash ability by clicking SHIFT key";
+                textToDisplay.enabled = true;
+                StartCoroutine(WaitTextTime());
+            }
+            if(AbillityCount == 1)
+            {
+                textToDisplay.text = "You have succesfully found the second vaccine dose, now you can use Blast ability by clicking Q key";
+                textToDisplay.enabled = true;
+                StartCoroutine(WaitTextTime());
+            }
+            if(AbillityCount == 2)
+            {
+                textToDisplay.text = "You have succesfully found the third vaccine dose, now you can use Push ability by clicking Right Mouse key";
+                textToDisplay.enabled = true;
+                StartCoroutine(WaitTextTime());
+            }
+            AbillityCount++;           
+        }
+
+        if (col.gameObject.tag == "SpawnPoint")
         {
             startPosition = this.transform.position;
-           
-            if(col.gameObject == checkPoints[currentCheckpoint])
+
+            textToDisplay.text = "You have succesfully reached the checkpoint now after you die you will respawn in this place";
+            textToDisplay.enabled = true;
+            StartCoroutine(WaitTextTime());
+
+            if (col.gameObject == checkPoints[currentCheckpoint])
             {
                 currentCheckpoint++;
                 compass.target = checkPoints[currentCheckpoint];
@@ -114,6 +154,7 @@ public class FPSController : MonoBehaviour
             if (inventory.AddItem(_item, 1))
             {
                 Destroy(col.gameObject);
+                //DestroyImmediate(col.gameObject, false);
             }
 
         }
@@ -133,6 +174,7 @@ public class FPSController : MonoBehaviour
         bloodSplatter.transform.SetParent(canvas.transform);
         bloodSplatter.transform.position = new Vector3(Random.Range(0, cWidth), Random.Range(0, cHeight), 0);
         Destroy(bloodSplatter, 2.2f);
+
         //Debug.Log("Health:" + health);
         if (health <= 0)
         {
@@ -282,9 +324,26 @@ public class FPSController : MonoBehaviour
         }
     }
 
+    float NextFire;
+    float fireRate = 3f;
     // Update is called once per frame
-    void Update()
+    public void Update()
     {
+
+        if (Input.GetKeyDown(KeyCode.Mouse1) && AbillityArray[1])
+        {
+            Debug.Log(AbillityArray[0]);
+            var pushSphere = Instantiate(pushAbilityPrefab, transform.position, transform.rotation);
+            pushSphere.GetComponent<PushAbility>().transformToFollow = transform;
+        }
+
+        if (Input.GetKeyDown(KeyCode.Q) && Time.time > NextFire && AbillityArray[2])
+        {
+            NextFire = Time.time + fireRate;
+            var tempBlast = Instantiate(BlastPrefab, camera.transform.position + camera.transform.forward, camera.transform.rotation);
+            tempBlast.GetComponent<Blast>().Player = transform;
+        }
+
         //Home Village
         if (Input.GetKeyDown(KeyCode.Z))
         {
@@ -390,7 +449,7 @@ public class FPSController : MonoBehaviour
 
     }
 
-    void PlaySteps()
+    public void PlaySteps()
     {
         AudioSource audioSource = new AudioSource();
         int random = Random.Range(1, steps.Length);
@@ -429,7 +488,7 @@ public class FPSController : MonoBehaviour
         UpdateCursorLock();
     }
 
-    Quaternion ClampRotationAroundXAxis(Quaternion q)
+    public Quaternion ClampRotationAroundXAxis(Quaternion q)
     {
         q.x /= q.w;
         q.y /= q.w;
@@ -442,7 +501,7 @@ public class FPSController : MonoBehaviour
 
         return q;
     }
-    bool IsGrounded()
+    public bool IsGrounded()
     {
         if (Physics.SphereCast(transform.position, cap.radius, Vector3.down,
             out _, (cap.height / 2f) - cap.radius + 0.12f))
@@ -455,7 +514,7 @@ public class FPSController : MonoBehaviour
         }
 
     }
-    void OnCollisionEnter(Collision col)
+    public void OnCollisionEnter(Collision col)
     {
         if(col.gameObject.tag == "Ammo" && gun.Ammo < gun.maxAmmoReserve)
         {
@@ -475,16 +534,6 @@ public class FPSController : MonoBehaviour
             Destroy(col.gameObject);
             healthPick.Play();
 
-        }
-        else if (col.gameObject.tag == "Lava")
-        {
-            health = Mathf.Clamp(health - 50, 0, 100);
-            healthbar.value = health;
-            Debug.Log("Health:" + health);
-            if(health <= 0)
-            {
-                deathSound.Play();
-            }
         }
 
         if (IsGrounded())

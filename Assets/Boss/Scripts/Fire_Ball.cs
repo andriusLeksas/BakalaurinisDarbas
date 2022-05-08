@@ -23,6 +23,7 @@ public class Fire_Ball : MonoBehaviour
 
         if(cronometro > 1f)
         {
+
             transform.localScale = new Vector3(1, 1, 1);
             gameObject.SetActive(false);
             cronometro = 0;

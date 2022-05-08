@@ -5,15 +5,15 @@ using UnityEngine.UI;
 
 public class Boss : MonoBehaviour
 {
-    public int rutina;
+    public int routine;
     public float cronometro;
-    public float time_rutinas;
+    public float timeRoutines;
     public Animator ani;
-    public Quaternion angulo;
-    public float grado;
+    public Quaternion angle;
+    public float degree;
     public GameObject target;
-    public bool atacando;
-    public RangoBoss rango;
+    public bool atacking;
+    public BossSkills range;
     public float speed;
     public GameObject[] hit;
     public int hit_select;
@@ -23,61 +23,55 @@ public class Boss : MonoBehaviour
     public ParticleSystem spitFire;
 
 
-    // Lanzallamas
-    public bool lanza_llamas;
+    public bool flamethrower;
     public List<GameObject> pool = new List<GameObject>();
     public GameObject fire;
-    public GameObject cabeza;
+    public GameObject head;
     private float cronometro2;
 
-
-    // Jump Attack
 
     public float jump_distance;
     public bool direction_skill;
 
 
-    // Fireball 
-
     public GameObject fire_ball;
     public GameObject point;
     public List<GameObject> pool2 = new List<GameObject>();
 
-    public int fase = 1;
+    public int faze = 1;
     public float Hp_Min;
     public float Hp_Max;
-    public Image barra;
-    public AudioSource musica;
-    public bool muerto;
-
-
-    // Start is called before the first frame update
-    void Start()
+    public Image image;
+    public AudioSource music;
+    public bool death;
+    public float visionDistance = 30;
+    
+    public void Start()
     {
         ani = GetComponent<Animator>();
         target = GameObject.Find("Character");
     }
 
-    public void Comportamiento_Boss()
+    public void BossBehaviour()
     {
-        Debug.Log("Comportamiento_Boss");
-        if (Vector3.Distance(transform.position, target.transform.position) < 30)
+        //Debug.Log("BossBehaviour");
+        if (Vector3.Distance(transform.position, target.transform.position) < visionDistance)
         {
             var lookPos = target.transform.position - transform.position;
             lookPos.y = 0;
             var rotation = Quaternion.LookRotation(lookPos);
             point.transform.LookAt(target.transform.position);
-            //musica.enabled = true;
+            //music.enabled = true;
 
-            if(Vector3.Distance(transform.position, target.transform.position) > 2 && !atacando)
+            if(Vector3.Distance(transform.position, target.transform.position) > 2 && !atacking)
             {
-                Debug.Log("Accesing Switch Rutina" + rutina);
-                switch (rutina)
+                //Debug.Log("Accesing Switch Rutina" + routine);
+                switch (routine)
                 {                  
                     
                     case 0:
                         
-                        Debug.Log(" trying to Walk case 0");
+                        //Debug.Log(" trying to Walk case 0");
                         transform.rotation = Quaternion.RotateTowards(transform.rotation, rotation, 2);
                         ani.SetBool("walk", true);
                         ani.SetBool("run", false);
@@ -102,11 +96,11 @@ public class Boss : MonoBehaviour
 
                         cronometro += 1 * Time.deltaTime;
 
-                        if(cronometro > time_rutinas)
+                        if(cronometro > timeRoutines)
                         {
-                            rutina = Random.Range(0, 5);
+                            routine = Random.Range(0, 5);
                             cronometro = 0;
-                            Debug.Log("Walking cronometro > time_rutinas");
+                            Debug.Log("Walking cronometro > timeRoutines");
                         }
 
                         break;
@@ -127,7 +121,7 @@ public class Boss : MonoBehaviour
                         break;
 
                     case 2:
-                        if(fase == 3)
+                        if(faze == 3)
                         {
                                               
                             ani.SetBool("walk", false);
@@ -135,12 +129,12 @@ public class Boss : MonoBehaviour
                             ani.SetBool("attack", true);
                             ani.SetFloat("skills", 0.8f);
                             transform.rotation = Quaternion.RotateTowards(transform.rotation, rotation, 2);
-                            rango.GetComponent<CapsuleCollider>().enabled = false;
+                            range.GetComponent<CapsuleCollider>().enabled = false;
 
                         }
                         else
                         {
-                            rutina = 0;
+                            routine = 0;
                             cronometro = 0;
                         }
 
@@ -148,7 +142,7 @@ public class Boss : MonoBehaviour
 
                     case 3:
                         
-                        if(fase == 3)
+                        if(faze == 3)
                         {
                             jump_distance += 1 * Time.deltaTime;
                             ani.SetBool("walk", false);
@@ -156,7 +150,7 @@ public class Boss : MonoBehaviour
                             ani.SetBool("attack", true);
                             ani.SetFloat("skills", 0.6f);
                             hit_select = 3;
-                            rango.GetComponent<CapsuleCollider>().enabled = false;
+                            range.GetComponent<CapsuleCollider>().enabled = false;
 
                             if (direction_skill)
                             {
@@ -171,7 +165,7 @@ public class Boss : MonoBehaviour
                         }
                         else
                         {
-                            rutina = 0;
+                            routine = 0;
                             cronometro = 0;
                         }
 
@@ -179,18 +173,18 @@ public class Boss : MonoBehaviour
 
                     case 4:
                         
-                        if (fase == 2)
+                        if (faze == 2)
                         {
                             ani.SetBool("walk", false);
                             ani.SetBool("run", false);
                             ani.SetBool("attack", true);
                             ani.SetFloat("skills", 1);
-                            rango.GetComponent<CapsuleCollider>().enabled = false;
+                            range.GetComponent<CapsuleCollider>().enabled = false;
                             transform.rotation = Quaternion.RotateTowards(transform.rotation, rotation, 0.5f);
                         }
                         else
                         {
-                            rutina = 0;
+                            routine = 0;
                             cronometro = 0;
                         }
 
@@ -208,9 +202,10 @@ public class Boss : MonoBehaviour
     public void TakeDamage(float amount)
     {
         Hp_Min -= amount;
+
         if (Hp_Min <= 0f)
         {
-            muerto = true;
+            death = true;
             ani.SetTrigger("dead");
             Destroy(this.gameObject, 10f);
         }
@@ -218,29 +213,35 @@ public class Boss : MonoBehaviour
 
     public void Final_Ani()
     {
-        Debug.Log("Final Ani ");
-        rutina = 0;
+        //Debug.Log("Final Ani ");
+        routine = 0;
         ani.SetBool("attack", false);
-        atacando = false;
-        rango.GetComponent<CapsuleCollider>().enabled = true;
-        lanza_llamas = false;
+        atacking = false;
+        range.GetComponent<CapsuleCollider>().enabled = true;
+        flamethrower = false;
         jump_distance = 0;
         direction_skill = false;
     }
 
     public void Direction_Attack_Start()
     {
+
         direction_skill = true;
+
     }
 
     public void Direction_Attack_Final()
     {
+
         direction_skill = false;
+
     }
 
     public void ColliderWeaponTrue()
     {
+
         hit[hit_select].GetComponent<SphereCollider>().enabled = true;
+
     }
 
     public void ColliderWeaponFalse()
@@ -248,7 +249,7 @@ public class Boss : MonoBehaviour
         hit[hit_select].GetComponent<SphereCollider>().enabled = false;
     }
 
-    public GameObject GetBala()
+    public GameObject GetObjects()
     {
         for (int i = 0; i < pool.Count; i++)
         {
@@ -259,32 +260,35 @@ public class Boss : MonoBehaviour
             }
         }
 
-        GameObject obj = Instantiate(fire, cabeza.transform.position, cabeza.transform.rotation) as GameObject;
+        GameObject obj = Instantiate(fire, head.transform.position, head.transform.rotation) as GameObject;
         pool.Add(obj);
         return obj;
     }
 
-    public void LanzaLlamas_skill()
+    public void FlamethrowerSkill()
     {
         cronometro2 += 1 * Time.deltaTime;
         if(cronometro2 > 0.1f)
         {
-            GameObject obj = GetBala();
-            obj.transform.position = cabeza.transform.position;
-            obj.transform.rotation = cabeza.transform.rotation;
+            GameObject obj = GetObjects();
+            obj.transform.position = head.transform.position;
+            obj.transform.rotation = head.transform.rotation;
             cronometro2 = 0;
         }
     }
 
     public void Start_fire()
     {
+
         spitFire.Play();
-        lanza_llamas = true;       
+        flamethrower = true;   
+        
     }
     public void Stop_Fire()
     {
+
         spitFire.Stop();
-        lanza_llamas = false;
+        flamethrower = false;
         
     }
 
@@ -306,26 +310,27 @@ public class Boss : MonoBehaviour
 
     public void Fire_Ball_Skill()
     {
+
         GameObject obj = Get_Fire_Ball();
-        obj.transform.position = cabeza.transform.position;
-        obj.transform.rotation = cabeza.transform.rotation;
+        obj.transform.position = head.transform.position;
+        obj.transform.rotation = head.transform.rotation;
+
     }
 
-    public void Vivo()
+    public void Alive()
     {
 
-        Debug.Log("Call Vivo" + rutina);
         if (Hp_Min < 500)
         {
-            fase = 2;
-            time_rutinas = 1;
+            faze = 2;
+            timeRoutines = 1;
         }
 
-        Comportamiento_Boss();
+        BossBehaviour();
 
-        if (lanza_llamas)
+        if (flamethrower)
         {
-            LanzaLlamas_skill();
+            FlamethrowerSkill();
         }
     }
 
@@ -336,21 +341,28 @@ public class Boss : MonoBehaviour
         {
             target = GameObject.Find("Character");
         }
-
-        healthbar.fillAmount = Hp_Min / Hp_Max;
-                         
-        if (Hp_Min > 0)
-        {
-            Vivo();
-        }
         else
         {
-            if (!muerto)
+            healthbar.fillAmount = Hp_Min / Hp_Max;
+
+            if (Hp_Min > 0)
             {
-                ani.SetTrigger("Dead");
-                musica.enabled = false;
+
+                Alive();
+
+            }
+            else
+            {
+                if (!death)
+                {
+
+                    ani.SetTrigger("Dead");
+                    music.enabled = false;
+
+                }
             }
         }
+      
     }
 
 }

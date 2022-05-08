@@ -30,25 +30,26 @@ public class Gun : MonoBehaviour
     public int Ammo = 200;
     public int maxAmmoReserve;
 
-    private bool isRealoading = false;
-
-    //public GameObject impactEffect;
+    public bool isRealoading = false;
+    FPSController player;
 
     public void Start()
     {
         currentAmmo = maxAmmo;
         maxAmmoReserve = Ammo;
         ammoReserves.text = currentAmmo + "/" + Ammo + "";
+        player = FindObjectOfType<FPSController>();
     }
 
-    private void OnEnable()
+    public void OnEnable()
     {
         isRealoading = false;
         ammoReserves.text = currentAmmo + "/" + Ammo + "";
     }
 
+    public bool fire1Input;
     // Update is called once per frame
-    void Update()
+    public void Update()
     {
         if (isRealoading)
         {
@@ -62,7 +63,8 @@ public class Gun : MonoBehaviour
             return;
         }
 
-        if (Input.GetButton("Fire1") && Time.time >= nextTimeToFire)
+        fire1Input = Input.GetButton("Fire1");
+        if (fire1Input && Time.time >= nextTimeToFire && !player.InventoryActive)
         {
 
             nextTimeToFire = Time.time + 1f / fireRate;
@@ -83,14 +85,13 @@ public class Gun : MonoBehaviour
         }
     }
 
-    IEnumerator Reload()
+    public IEnumerator Reload()
     {
         isRealoading = true;
 
         anim.SetTrigger("reload");
         reloadSound.Play();
 
-        Debug.Log("Reloading");
 
         yield return new WaitForSeconds(reloadTime -.25f);
 
@@ -106,7 +107,7 @@ public class Gun : MonoBehaviour
     }
 
 
-    void Shoot()
+    public void Shoot()
     {
         anim.SetTrigger("fire");
 

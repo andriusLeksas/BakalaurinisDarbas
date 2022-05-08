@@ -32,4 +32,9 @@ public class AllButtons : MonoBehaviour
         AudioSource music = gController.GetComponent<AudioSource>();
         music.volume = vol;
     }
+
+    public void ExitGame()
+    {
+        Application.Quit();
+    }
 }

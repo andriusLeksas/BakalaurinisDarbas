@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class RangoBoss : MonoBehaviour
+public class BossSkills : MonoBehaviour
 {
 
     public Animator ani;
@@ -34,7 +34,7 @@ public class RangoBoss : MonoBehaviour
                     break;
                 
                 case 3:
-                    if(boss.fase == 2)
+                    if(boss.faze == 2)
                     {
                         ani.SetFloat("skills", 1);
                     }
@@ -48,7 +48,7 @@ public class RangoBoss : MonoBehaviour
             ani.SetBool("walk", false);
             ani.SetBool("run", false);
             ani.SetBool("attack", true);
-            boss.atacando = true;
+            boss.atacking = true;
             GetComponent<CapsuleCollider>().enabled = false;
         }
     }

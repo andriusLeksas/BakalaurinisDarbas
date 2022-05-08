@@ -336,6 +336,7 @@ GameObject:
   - component: {fileID: 1420053068737146922}
   - component: {fileID: 16732283}
   - component: {fileID: 16732284}
+  - component: {fileID: 3393246596487257686}
   m_Layer: 8
   m_Name: boss
   m_TagString: Zombie
@@ -393,7 +394,6 @@ MonoBehaviour:
   itemArray:
   - {fileID: 3923602313571035676, guid: 6dbbe902af32c4e429d478d7b28fe6bc, type: 3}
   - {fileID: 6277786227652748690, guid: b53d7cfa641eaab4f858166956c0e2cd, type: 3}
-  - {fileID: 165310, guid: 4cdcc6c16809ba5439c8798d9bb925f4, type: 3}
   health: 30
   target: {fileID: 0}
   walkingSpeed: 0.5
@@ -963,6 +963,22 @@ MonoBehaviour:
   sound3D: 1
   randomMin: 1
   randomMax: 200
+--- !u!54 &3393246596487257686
+Rigidbody:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1099347172983380646}
+  serializedVersion: 2
+  m_Mass: 1
+  m_Drag: 0.05
+  m_AngularDrag: 0.05
+  m_UseGravity: 1
+  m_IsKinematic: 0
+  m_Interpolate: 0
+  m_Constraints: 36
+  m_CollisionDetection: 0
 --- !u!1 &1571866649296816644
 GameObject:
   m_ObjectHideFlags: 0

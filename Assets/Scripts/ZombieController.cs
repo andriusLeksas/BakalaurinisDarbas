@@ -10,22 +10,22 @@ public class ZombieController : MonoBehaviour
     public GameObject target;
     public float walkingSpeed;
     public float runningSpeed;
-    Animator anim;
-    NavMeshAgent agent;
+    public Animator anim;
+    public NavMeshAgent agent;
     public GameObject ragdoll;
     public float damageAmount = 10;
-    enum STATE { IDLE, WANDER, ATTACK, CHASE, DEAD };
-    STATE state = STATE.IDLE;
+    public enum STATE { IDLE, WANDER, ATTACK, CHASE, DEAD };
+    public STATE state = STATE.IDLE;
     public AudioSource[] attacks;
 
     // Start is called before the first frame update
-    void Start()
+    public void Start()
     {
         anim = this.GetComponent<Animator>();
         agent = this.GetComponent<NavMeshAgent>();
     }
 
-    void TurnOffTriggers()
+    public void TurnOffTriggers()
     {
         anim.SetBool("isWalking", false);
         anim.SetBool("isAttacking", false);
@@ -33,7 +33,7 @@ public class ZombieController : MonoBehaviour
         anim.SetBool("isDead", false);
     }
 
-    void PlayAttackAudio()
+    public void PlayAttackAudio()
     {
         AudioSource audioSource = new AudioSource();
         int random = Random.Range(1, attacks.Length);
@@ -48,11 +48,10 @@ public class ZombieController : MonoBehaviour
         {
             target.GetComponent<FPSController>().TakeHit(damageAmount);
             PlayAttackAudio();
-        }
-        
+        }      
     }
 
-    float DistanceToPlayer()
+    public float DistanceToPlayer()
     {
         if (GameStats.gameOver) 
         {
@@ -62,7 +61,7 @@ public class ZombieController : MonoBehaviour
         return Vector3.Distance(target.transform.position, this.transform.position);
     }
 
-    bool CanSeePlayer()
+    public bool CanSeePlayer()
     {
         if (DistanceToPlayer() < 25)
         {
@@ -72,7 +71,7 @@ public class ZombieController : MonoBehaviour
         return false;
     }
 
-    bool ForgetPlayer()
+    public bool ForgetPlayer()
     {
         if (DistanceToPlayer() > 20)
         {
@@ -82,21 +81,11 @@ public class ZombieController : MonoBehaviour
         return false;
     }
 
-    public void TakeDamage(float amount)
+     public void TakeDamage(float amount)
     {
         health -= amount;
         if (health <= 0f)
         {
-            Vector3 pos = new Vector3(this.transform.position.x,
-                                      Terrain.activeTerrain.SampleHeight(this.transform.position) + 1,
-                                      this.transform.position.z);
-
-            //if(Random.Range(0,10) < 5)
-            //{
-                GameObject item = Instantiate(itemArray[Random.Range(0, 3)], pos, this.transform.rotation);
-                item.GetComponentInChildren<Billboard>()._camera = FindObjectOfType<Camera>();
-            //}         
-
             KillZombie();
         }
     }
@@ -107,9 +96,20 @@ public class ZombieController : MonoBehaviour
         TurnOffTriggers();
         anim.SetBool("isDead", true);
         state = STATE.DEAD;
+
+        Vector3 pos = new Vector3(this.transform.position.x,
+                          Terrain.activeTerrain.SampleHeight(this.transform.position) + 1,
+                          this.transform.position.z);
+
+        //if(Random.Range(0,10) < 5)
+        //{
+
+        //}  
+        GameObject item = Instantiate(itemArray[Random.Range(0, 2)], pos, this.transform.rotation);
+        item.GetComponentInChildren<Billboard>()._camera = FindObjectOfType<Camera>();
     }
-    // Update is called once per frame
-    void Update()
+    
+    public void Update()
     {
        
         if(target == null && GameStats.gameOver == false)
@@ -120,12 +120,15 @@ public class ZombieController : MonoBehaviour
 
         switch (state)
         {
+
             case STATE.IDLE:
                 if (CanSeePlayer()) state = STATE.CHASE;
                 else if (Random.Range(0, 3000) < 5)
                     state = STATE.WANDER;
                 break;
+
             case STATE.WANDER:
+
                 if (!agent.hasPath)
                 {
                     float newX = this.transform.position.x + Random.Range(-5, 5);
@@ -138,7 +141,9 @@ public class ZombieController : MonoBehaviour
                     agent.speed = walkingSpeed;
                     anim.SetBool("isWalking", true);
                 }
+
                 if (CanSeePlayer()) state = STATE.CHASE;
+
                 else if (Random.Range(0, 3000) < 5)
                 {
                     state = STATE.IDLE;
@@ -146,13 +151,16 @@ public class ZombieController : MonoBehaviour
                     agent.ResetPath();
                 }
                 break;
+
             case STATE.CHASE:
+
                 if (GameStats.gameOver)
                 {
                     TurnOffTriggers();
                     state = STATE.WANDER;
                     return;
                 }
+
                 agent.SetDestination(target.transform.position);
                 agent.stoppingDistance = 3;
                 TurnOffTriggers();
@@ -171,28 +179,38 @@ public class ZombieController : MonoBehaviour
                 }
 
                 break;
+
             case STATE.ATTACK:
+
                 if (GameStats.gameOver)
                 {
                     TurnOffTriggers();
                     state = STATE.WANDER;
                     return;
                 }
+
                 TurnOffTriggers();
                 anim.SetBool("isAttacking", true);
                 this.transform.LookAt(target.transform.position);
                 if (DistanceToPlayer() > agent.stoppingDistance + 2)
+                {
                     state = STATE.CHASE;
+                }
+                    
                 break;
+
             case STATE.DEAD:
+
                 Destroy(agent);
                 AudioSource[] sounds = this.GetComponents<AudioSource>();
                 foreach(AudioSource s in sounds)
                 {
                     s.volume = 0;
                 }
+
                 this.GetComponent<SinkingScript>().StartSink();
                 break;
+
         }
     }
 }

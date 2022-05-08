@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class Bala : MonoBehaviour
+public class MoveFireBall : MonoBehaviour
 {
     public float cronometro;
     // Start is called before the first frame update
